@@ -4,6 +4,10 @@ FaceMatcher is a desktop application that finds visually similar people across i
 
 Unlike traditional facial recognition systems, FaceMatcher matches people based on their overall appearance, including clothing, body shape, colors, and visual features. This makes it useful in situations where faces are partially visible, turned away, blurred, or too small for reliable facial recognition.
 
+| Reference Person                             | Selected Source                           | Matching Result                           |
+| :------------------------------------------: | :---------------------------------------: | :---------------------------------------: |
+| <img height="300" alt="Screenshot 2026-06-23 at 10 10 38 AM" src="https://github.com/user-attachments/assets/f4d498be-81e5-40f0-a217-5b5bf4e3bd68"> | <img width="500" alt="CrossWalk_(5465840138)" src="https://github.com/user-attachments/assets/31847689-d409-4156-99cb-9c2ef9d6933a"> | <img width="500" alt="result" src="https://github.com/user-attachments/assets/f63c8118-ba4e-456c-ad6f-9886c57e496b"> |
+
 ## Features
 
 * 🔍 Search for a person using a reference image
@@ -46,6 +50,13 @@ Unlike traditional facial recognition systems, FaceMatcher matches people based 
 * OSNet-x1 (Person Re-Identification)
 * BoxMOT Occluboost (Tracking + Cosine Similarity Filtering)
 
+
+## 📺 Demo
+
+https://github.com/user-attachments/assets/48f9dd4a-5ba7-4b2d-8e85-2f458c582236
+
+<br>
+
 ## ⚠️ Known Limitations
 
 > FaceMatcher relies on appearance-based Person Re-Identification rather than facial recognition. Matching performance is heavily dependent on the capabilities of the underlying ReID model.
@@ -67,16 +78,6 @@ The following features are currently under active development and may be unstabl
 * Advanced tracking and timeline visualization
 * Match logging and analytics improvements
 
-
-
-## Screenshots
-
-
-| Reference Person                             | Selected Source                           | Matching Result                           |
-| :------------------------------------------: | :---------------------------------------: | :---------------------------------------: |
-| <img height="300" alt="Screenshot 2026-06-23 at 10 10 38 AM" src="https://github.com/user-attachments/assets/f4d498be-81e5-40f0-a217-5b5bf4e3bd68"> | <img width="500" alt="CrossWalk_(5465840138)" src="https://github.com/user-attachments/assets/31847689-d409-4156-99cb-9c2ef9d6933a"> | <img width="500" alt="result" src="https://github.com/user-attachments/assets/f63c8118-ba4e-456c-ad6f-9886c57e496b"> |
-
-https://github.com/user-attachments/assets/48f9dd4a-5ba7-4b2d-8e85-2f458c582236
 
 ## Installation
 
