@@ -91,22 +91,21 @@ class Processor(QThread):
         self.last_frame: np.ndarray | None = None
         self.frame_buffer: list[np.ndarray] = []
         self.source_fps: float = 30.0
-        self.output_video_path: str | None = None  # ← add this too
-        self.write_to_disk: bool = False           # ← and this
+        self.output_video_path: str | None = None
+        self.write_to_disk: bool = False
 
         self.frame_queue: Queue = Queue(maxsize=2)
         self._tracker: Tracker | None = None
         self._disk_writer = DiskWriter()
 
-    def setup(self, detector, reid, ref_embedding, source, source_path, threshold,
-          write_to_disk: bool = False):        # ← add this param
+    def setup(self, detector, reid, ref_embedding, source, source_path, threshold, write_to_disk: bool = False):
         self.detector = detector
         self.reid = reid
         self.ref_embedding = ref_embedding
         self.source = source
         self.source_path = source_path
         self.threshold = threshold
-        self.write_to_disk = write_to_disk         # ← store it
+        self.write_to_disk = write_to_disk
         self.last_frame = None
         self.frame_buffer = []
         self.output_video_path = None
@@ -134,7 +133,7 @@ class Processor(QThread):
     def stop(self):
         self._running = False
         try:
-            self.frame_queue.put_nowait(None)  # unblock queue.get()
+            self.frame_queue.put_nowait(None)
         except Exception:
             pass
 

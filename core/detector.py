@@ -1,10 +1,14 @@
 import os
-import cv2
 import numpy as np
 from ultralytics import YOLO
 
 MODELS_PATH = "data/models/detectors"
-DETECTOR_CONF = 0.4  # internal confidence, not exposed to UI
+
+DETECTOR_CONF = 0.15
+DETECTOR_IOU = 0.7
+DETECTOR_IMGSZ = 1280
+DETECTOR_MAX_DET = 300
+MIN_PERSON_HEIGHT = 80
 
 
 class Detector:
@@ -18,23 +22,45 @@ class Detector:
         Run person detection on a single frame.
 
         Returns:
-            List of dicts: [{ "box": (x1, y1, x2, y2), "crop": np.ndarray, "conf": float }]
+            List of dicts:
+            [
+                {
+                    "box": (x1, y1, x2, y2),
+                    "crop": np.ndarray,
+                    "conf": float
+                }
+            ]
         """
-        results = self.model(frame, conf=DETECTOR_CONF, verbose=False)[0]
+
+        results = self.model(
+            frame,
+            classes=[0],  # person only
+            conf=DETECTOR_CONF,
+            iou=DETECTOR_IOU,
+            imgsz=DETECTOR_IMGSZ,
+            max_det=DETECTOR_MAX_DET,
+            verbose=False,
+        )[0]
+
         detections = []
+        h, w = frame.shape[:2]
 
         for box in results.boxes:
-            if int(box.cls[0]) != 0:  # person only
+            x1, y1, x2, y2 = map(int, box.xyxy[0])
+
+            # Ignore tiny detections
+            box_h = y2 - y1
+            if box_h < MIN_PERSON_HEIGHT:
                 continue
 
-            x1, y1, x2, y2 = map(int, box.xyxy[0])
-            conf = float(box.conf[0])
-
-            h, w = frame.shape[:2]
-            x1, y1 = max(0, x1), max(0, y1)
-            x2, y2 = min(w, x2), min(h, y2)
+            # Keep coordinates inside image bounds
+            x1 = max(0, x1)
+            y1 = max(0, y1)
+            x2 = min(w, x2)
+            y2 = min(h, y2)
 
             crop = frame[y1:y2, x1:x2]
+
             if crop.size == 0:
                 continue
 
@@ -42,7 +68,7 @@ class Detector:
                 {
                     "box": (x1, y1, x2, y2),
                     "crop": crop,
-                    "conf": conf,
+                    "conf": float(box.conf[0]),
                 }
             )
 
@@ -50,12 +76,13 @@ class Detector:
 
     def detect_single(self, image: np.ndarray) -> np.ndarray | None:
         """
-        For reference image: detect the first person and return their crop.
-        Returns None if no person is found.
+        For reference image:
+        detect the highest-confidence person and return their crop.
         """
+
         detections = self.detect(image)
         if not detections:
             return None
-        # take highest confidence detection
+
         best = max(detections, key=lambda d: d["conf"])
         return best["crop"]
