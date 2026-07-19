@@ -53,7 +53,7 @@ Unlike traditional facial recognition systems, FaceMatcher matches people based 
 
 ## 📺 APP Demo
 
-https://github.com/user-attachments/assets/48f9dd4a-5ba7-4b2d-8e85-2f458c582236
+https://github.com/user-attachments/assets/b2f74315-b3ae-4db1-9c89-38ca6e7aab4d
 
 <br>
 
