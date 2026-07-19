@@ -1,0 +1,17 @@
+pyside6
+pyqt6
+opencv-python
+numpy
+torch
+torchvision
+ultralytics
+scipy
+pillow
+tqdm
+onnxruntime
+faiss-cpu
+pyobjc-framework-AVFoundation
+torchreid
+gdown
+tensorboard
+boxmot
