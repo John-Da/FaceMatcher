@@ -69,20 +69,10 @@ Current limitations include:
 * Re-identification performance is limited by the capabilities of the OSNet-x1 model.
 * Similarity scores should be treated as confidence indicators rather than definitive identity verification.
 
-### Development Status
-
-The following features are currently under active development and may be unstable or incomplete:
-
-* Video processing workflow
-* Real-time webcam matching
-* Advanced tracking and timeline visualization
-* Match logging and analytics improvements
-
-
 ## Installation
 
 ```bash
-git clone https://github.com/yourusername/FaceMatcher.git
+git clone https://github.com/John-Da/FaceMatcher.git
 
 cd FaceMatcher
 
@@ -97,13 +87,8 @@ pip install -r requirements.txt
 ## Run
 
 ```bash
-python main.py
+python app.py
 ```
-
-## Project Status
-
-FaceMatcher is currently under active development: new features like video and webcame and performance improvements.
-
 
 ## License
 
