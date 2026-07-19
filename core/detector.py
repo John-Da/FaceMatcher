@@ -27,9 +27,9 @@ class Detector:
         self.device = get_device()
         self.model = YOLO(model_path)
         self.model.to(self.device)
-        print(
-            f"[Detector] Loaded on device: {next(self.model.model.parameters()).device}"
-        )
+        # print(
+        #     f"[Detector] Loaded on device: {next(self.model.model.parameters()).device}"
+        # )
 
     def detect(self, frame: np.ndarray, imgsz: int | None = None) -> list[dict]:
         """

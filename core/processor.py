@@ -133,10 +133,10 @@ class Processor(QThread):
             self._tracker = Tracker(fps=self.source_fps)
         else:
             self._tracker = None
-            print(
-                "[Processor] boxmot not found — running without StrongSORT. "
-                "Install with:  pip install boxmot"
-            )
+            # print(
+            #     "[Processor] boxmot not found — running without StrongSORT. "
+            #     "Install with:  pip install boxmot"
+            # )
 
         if self.source == "image":
             self._process_image()
@@ -243,13 +243,11 @@ class Processor(QThread):
     def _log_new_matches(
         self, timestamp: str, frame_num: int, matches: list[tuple[int, float]]
     ):
-        if not matches:
-            return
-
-        # If multiple matches exist in one frame, take the first — keeps
-        # "current tracked identity" as a single value, frame to frame.
-        track_id, similarity = matches[0]
-        self.match_found.emit(timestamp, frame_num, similarity, track_id)
+        # Emit for every currently-matched person this frame — MatchLog
+        # decides per-ID whether that's a new row or an update to an
+        # existing one.
+        for track_id, similarity in matches:
+            self.match_found.emit(timestamp, frame_num, similarity, track_id)
 
     # ------------------------------------------------------------------
     # Per-frame logic
@@ -322,14 +320,14 @@ class Processor(QThread):
 
         t4 = time.perf_counter()
 
-        if frame_num % 30 == 0:
-            print(
-                f"[frame {frame_num}] n_dets={len(detections)}  "
-                f"detect={1000*(t1-t0):.1f}ms  "
-                f"reid={1000*(t2-t1):.1f}ms  "
-                f"track/draw={1000*(t4-t2):.1f}ms  "
-                f"TOTAL={1000*(t4-t0):.1f}ms"
-            )
+        # if frame_num % 30 == 0:
+        #     print(
+        #         f"[frame {frame_num}] n_dets={len(detections)}  "
+        #         f"detect={1000*(t1-t0):.1f}ms  "
+        #         f"reid={1000*(t2-t1):.1f}ms  "
+        #         f"track/draw={1000*(t4-t2):.1f}ms  "
+        #         f"TOTAL={1000*(t4-t0):.1f}ms"
+        #     )
 
         return annotated, matches
 

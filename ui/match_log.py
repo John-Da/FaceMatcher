@@ -15,6 +15,11 @@ class MatchLog(QWidget):
 
     def __init__(self):
         super().__init__()
+
+        self._row_by_id: dict[str, int] = {}
+        self._last_update_ts: dict[str, float] = {}
+        self._min_update_interval = 0.15
+
         self.setup_ui()
 
     def setup_ui(self):
@@ -27,8 +32,6 @@ class MatchLog(QWidget):
         self.table = QTableWidget()
         self.table.setColumnCount(5)
         self.table.setMinimumSize(800, 200)
-
-        self._min_update_interval = 0.15  # seconds, ~6-7 UI updates/sec max
 
         self.table.setHorizontalHeaderLabels(
             [
@@ -90,21 +93,20 @@ class MatchLog(QWidget):
     def add_match(
         self, timestamp, frame_num, similarity, person_id, status="Match Found"
     ):
-        same_person = person_id == self._last_person_id and self._last_row >= 0
+        key = str(person_id)
         now = time.monotonic()
+        row = self._row_by_id.get(key)
 
-        if same_person:
-            row = self._last_row
-            # throttle: skip the UI write if we just updated this row
-            if now - self._last_update_ts < self._min_update_interval:
-                return
+        if row is not None:
+            last_ts = self._last_update_ts.get(key, 0.0)
+            if now - last_ts < self._min_update_interval:
+                return  # throttle: this ID's row was just updated
         else:
             row = self.table.rowCount()
             self.table.insertRow(row)
-            self._last_row = row
-            self._last_person_id = person_id
+            self._row_by_id[key] = row
 
-        self._last_update_ts = now
+        self._last_update_ts[key] = now
 
         items = [
             str(timestamp),
@@ -132,8 +134,8 @@ class MatchLog(QWidget):
 
     def clear(self):
         self.table.setRowCount(0)
-        self._last_person_id = None
-        self._last_row = -1
+        self._row_by_id.clear()
+        self._last_update_ts.clear()
 
     def get_rows(self) -> list[dict]:
         """Return all rows as list of dicts for CSV export."""

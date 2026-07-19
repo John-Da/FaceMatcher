@@ -45,7 +45,7 @@ class ReID:
 
         self.model.eval()
         self.model.to(self.device)
-        print(f"[ReID] Loaded on device: {next(self.model.parameters()).device}")
+        # print(f"[ReID] Loaded on device: {next(self.model.parameters()).device}")
 
     def _resolve_model_name(self, filename: str) -> str:
         name = os.path.splitext(filename)[0]  # osnet_x1_0_imagenet
